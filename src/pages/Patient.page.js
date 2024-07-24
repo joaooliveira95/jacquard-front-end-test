@@ -1,16 +1,8 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Box,
-  Button,
-  Heading,
-  Text,
-  Flex,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Heading, Flex, useToast, VStack } from "@chakra-ui/react";
 import _ from "lodash";
-import { formatDate } from "../utils/utils";
+import PatientCard from "../components/PatientCard.component";
 
 const PatientsPage = () => {
   const patients = useSelector((state) => state.patients);
@@ -67,21 +59,8 @@ const PatientsPage = () => {
               {type}
             </Heading>
             <VStack spacing={4}>
-              {groupedAndSortedPatients[type].map((patient, index) => (
-                <Box
-                  key={index}
-                  p={2}
-                  borderRadius="md"
-                  w={"100%"}
-                  bg={"white"}
-                >
-                  <Text>Name: {patient.name}</Text>
-                  <Text>Joined: {formatDate(new Date(patient.joined))}</Text>
-                  <Text>
-                    Last visit: {formatDate(new Date(patient.last_visit_date))}
-                  </Text>
-                  <Text>Completed: {patient.is_completed ? "Yes" : "No"}</Text>
-                </Box>
+              {groupedAndSortedPatients[type].map((patient) => (
+                <PatientCard key={patient._id} {...patient} />
               ))}
             </VStack>
           </Box>

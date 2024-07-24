@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { MOCKED_PATIENTS } from "../mocked_patients";
 import { validatePassword, validateUsername } from "../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -21,6 +22,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const toast = useToast();
+  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -56,6 +58,7 @@ const LoginForm = () => {
           duration: 5000,
           isClosable: true,
         });
+        navigate('/patients')
       } else {
         setErrors({
           api: "Login failed. Please check your username and password.",
@@ -67,6 +70,8 @@ const LoginForm = () => {
         type: "LOGIN_SUCCESS",
         payload: { user: username, patients: MOCKED_PATIENTS },
       });
+      navigate('/patients')
+
       setErrors({ api: "Login failed. Please try again later." });
     }
   };

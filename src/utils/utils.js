@@ -12,6 +12,7 @@ export const validateUsername = (value) => {
   const [localPart, domainPart] = value.split("@");
   const [domain, ...extensions] = domainPart.split(".");
   const extension = extensions.join(".");
+  console.log(domain)
 
   if (localPart.length > usernameMaxLength) {
     return `Username before '@' cannot exceed ${usernameMaxLength} characters!`;
