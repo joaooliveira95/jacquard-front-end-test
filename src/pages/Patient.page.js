@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box, Button, Heading, Flex, useToast, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import PatientCard from "../components/PatientCard.component";
+import { Fade } from "react-awesome-reveal";
 
 const PatientsPage = () => {
   const patients = useSelector((state) => state.patients);
@@ -39,34 +40,38 @@ const PatientsPage = () => {
   }, [patients]);
 
   return (
-    <Box>
-      <Flex justifyContent="space-between" alignItems="center" mb={8}>
-        <Heading as="h1">Hospital Patients</Heading>
-        <Button colorScheme="teal" onClick={handleLogout}>
-          Logout
-        </Button>
-      </Flex>
-      <VStack spacing={4}>
-        {Object.keys(groupedAndSortedPatients).map((type) => (
-          <Box key={type} mb={2} width={"100%"}>
-            <Heading
-              as="h2"
-              size="md"
-              mb={4}
-              textTransform={"uppercase"}
-              opacity={0.8}
-            >
-              {type}
-            </Heading>
-            <VStack spacing={4}>
-              {groupedAndSortedPatients[type].map((patient) => (
-                <PatientCard key={patient._id} {...patient} />
-              ))}
-            </VStack>
-          </Box>
-        ))}
-      </VStack>
-    </Box>
+    <Fade triggerOnce>
+      <Box>
+        <Flex justifyContent="space-between" alignItems="center" mb={8}>
+          <Heading as="h1">Hospital Patients</Heading>
+          <Button colorScheme="teal" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Flex>
+        <VStack spacing={4}>
+          {Object.keys(groupedAndSortedPatients).map((type) => (
+            <Box key={type} mb={2} width={"100%"}>
+              <Heading
+                as="h2"
+                size="md"
+                mb={4}
+                textTransform={"uppercase"}
+                opacity={0.8}
+              >
+                {type}
+              </Heading>
+              <VStack spacing={4} flexDir={"column"}>
+                {groupedAndSortedPatients[type].map((patient, index) => (
+                  <Fade direction="up" key={patient._id} style={{width: "100%"}} delay={index * 50} triggerOnce>
+                    <PatientCard {...patient} />
+                  </Fade>
+                ))}
+              </VStack>
+            </Box>
+          ))}
+        </VStack>
+      </Box>
+    </Fade>
   );
 };
 

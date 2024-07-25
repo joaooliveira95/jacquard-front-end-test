@@ -16,13 +16,15 @@ import { MOCKED_PATIENTS } from "../mocked_patients";
 import { validatePassword, validateUsername } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 
+const ENDPOINT = "https://run.mocky.io/v3/1c9c285d-7388-435c-a0ec-08b4e969b51d";
+
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toast = useToast();
-  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -38,13 +40,10 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await axios.post(
-        "https://run.mocky.io/v3/1c9c285d-7388-435c-a0ec-08b4e969b51d",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(ENDPOINT, {
+        username,
+        password,
+      });
 
       if (response.status === 200) {
         dispatch({
@@ -58,7 +57,7 @@ const LoginForm = () => {
           duration: 5000,
           isClosable: true,
         });
-        navigate('/patients')
+        navigate("/patients");
       } else {
         setErrors({
           api: "Login failed. Please check your username and password.",
@@ -70,7 +69,8 @@ const LoginForm = () => {
         type: "LOGIN_SUCCESS",
         payload: { user: username, patients: MOCKED_PATIENTS },
       });
-      navigate('/patients')
+      // The API gives me not found so I had to force this navigation step
+      navigate("/patients");
 
       setErrors({ api: "Login failed. Please try again later." });
     }
@@ -85,7 +85,7 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
           <FormControl id="username" isInvalid={!!errors.username}>
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Username *</FormLabel>
             <Input
               bg={"white"}
               required
@@ -96,7 +96,7 @@ const LoginForm = () => {
             {errors.username && <Text color="red.500">{errors.username}</Text>}
           </FormControl>
           <FormControl id="password" isInvalid={!!errors.password}>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Password *</FormLabel>
             <Input
               bg={"white"}
               required
